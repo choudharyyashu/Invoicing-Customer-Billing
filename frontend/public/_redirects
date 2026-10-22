@@ -1,0 +1,13 @@
+# Netlify Redirects Configuration for LedgerFlow Frontend
+# -------------------------------------------------------------
+# 1. API Reverse Proxy (Optional Fallback Strategy)
+# If VITE_API_BASE_URL is not set at build time, requests to /api/v1/* are proxied
+# directly to the Express production backend server.
+# Replace https://<your-production-backend-domain> with your actual backend host.
+# Note: If VITE_API_BASE_URL is configured in Netlify environment variables,
+# frontend requests bypass this proxy and connect directly to the backend.
+# /api/v1/*  https://<your-production-backend-domain>/api/v1/:splat  200!
+
+# 2. SPA Client-Side Routing Fallback
+# Serves index.html for all frontend page navigation paths
+/*  /index.html  200

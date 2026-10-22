@@ -1,0 +1,80 @@
+export const initialPayments = [
+  {
+    id: 'PAY-2026-042',
+    customerId: 'CUST-001',
+    customerName: 'Green Valley Restaurant',
+    invoiceId: 'INV-2026-089',
+    invoiceNumber: 'INV-2026-089',
+    date: '2026-09-30',
+    amount: 200.00,
+    method: 'Bank Transfer',
+    reference: 'BACS-GV-9941',
+    status: 'Completed',
+    notes: 'Partial payment against INV-2026-089'
+  },
+  {
+    id: 'PAY-2026-041',
+    customerId: 'CUST-003',
+    customerName: 'Riverside Cafe',
+    invoiceId: 'INV-2026-086',
+    invoiceNumber: 'INV-2026-086',
+    date: '2026-09-26',
+    amount: 189.45,
+    method: 'Square',
+    reference: 'SQ-TXN-881923',
+    status: 'Completed',
+    notes: 'Contactless card settlement via Square POS terminal'
+  },
+  {
+    id: 'PAY-2026-040',
+    customerId: 'CUST-005',
+    customerName: 'Bella Bistro',
+    invoiceId: 'INV-2026-085',
+    invoiceNumber: 'INV-2026-085',
+    date: '2026-09-22',
+    amount: 250.00,
+    method: 'Bank Transfer',
+    reference: 'BACS-BB-1120',
+    status: 'Completed',
+    notes: 'Payment received on account'
+  },
+  {
+    id: 'PAY-2026-039',
+    customerId: 'CUST-001',
+    customerName: 'Green Valley Restaurant',
+    invoiceId: 'INV-2026-084',
+    invoiceNumber: 'INV-2026-084',
+    date: '2026-09-14',
+    amount: 615.00,
+    method: 'Bank Transfer',
+    reference: 'BACS-GV-9831',
+    status: 'Completed',
+    notes: 'Full payment for INV-2026-084'
+  },
+  {
+    id: 'PAY-2026-038',
+    customerId: 'CUST-002',
+    customerName: 'The Fresh Kitchen',
+    invoiceId: 'INV-2026-080',
+    invoiceNumber: 'INV-2026-080',
+    date: '2026-09-08',
+    amount: 850.00,
+    method: 'Square',
+    reference: 'SQ-TXN-773410',
+    status: 'Completed',
+    notes: 'Direct online invoice payment via Square link'
+  },
+  {
+    id: 'PAY-2026-037',
+    customerId: 'CUST-004',
+    customerName: 'Market Street Foods',
+    invoiceId: 'INV-2026-079',
+    invoiceNumber: 'INV-2026-079',
+    date: '2026-09-02',
+    amount: 1200.00,
+    method: 'Bank Transfer',
+    reference: 'BACS-MS-4412',
+    status: 'Completed',
+    notes: 'Statement clearance payment'
+  }
+];

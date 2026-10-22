@@ -1,0 +1,19 @@
+# Netlify Build and Routing Configuration for LedgerFlow Frontend
+
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+# Context-specific build configurations
+[context.production.environment]
+  NODE_VERSION = "20"
+
+[context.deploy-preview.environment]
+  NODE_VERSION = "20"
+
+# SPA Routing: Fallback all client navigation routes to index.html
+# (Status 200 tells Netlify to rewrite rather than 301/302 redirect)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
