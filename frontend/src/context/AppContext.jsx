@@ -1660,13 +1660,9 @@ export const AppProvider = ({ children }) => {
     showToast(`Added ${formatCurrency(entry.estimatedExpense)} mileage expense to Accounting ledger!`);
   };
 
-  // WhatsApp Simulation Trigger
+  // WhatsApp Action Trigger
   const triggerWhatsAppAction = (actionType, details = {}) => {
-    if (businessSettings.whatsAppStatus !== 'connected') {
-      showToast('WhatsApp integration is currently disconnected in Settings.', 'warning');
-    } else {
-      showToast(`Mock: Sent ${actionType} to ${details.recipient || 'customer'} via WhatsApp!`, 'success');
-    }
+    showToast('WhatsApp integration is currently not implemented.', 'warning');
   };
 
   // Reset Mock Data to Factory Defaults

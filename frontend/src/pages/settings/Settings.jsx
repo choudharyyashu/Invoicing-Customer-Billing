@@ -337,17 +337,20 @@ export const Settings = () => {
             </div>
 
             <div className="pt-4 border-t border-slate-100">
-              <div className="flex items-center justify-between p-4 bg-purple-50/50 rounded-xl border border-purple-200">
+              <div
+                className="flex items-center justify-between p-4 bg-slate-50/80 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={() => showToast('Square POS card terminal integration is currently not implemented.', 'warning')}
+              >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold">
+                  <div className="w-10 h-10 rounded-xl bg-slate-300 text-slate-700 flex items-center justify-center font-bold">
                     SQ
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-slate-900">Square Card Payments</h4>
-                    <p className="text-xs text-slate-500">Contactless card terminal & payment links.</p>
+                    <p className="text-xs text-slate-500">Contactless card terminal & POS sync (Click to test).</p>
                   </div>
                 </div>
-                <Badge variant="purple" size="sm">Connected (Active)</Badge>
+                <Badge variant="draft" size="sm">Currently Not Implemented</Badge>
               </div>
             </div>
 
@@ -366,43 +369,40 @@ export const Settings = () => {
           <div className="max-w-2xl space-y-5">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-[#25D366]/20 text-[#25D366] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
                   <MessageSquare className="w-5 h-5" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-900">WhatsApp Messaging</h3>
-                  <p className="text-xs text-slate-500">Optional customer reminder & statement sharing.</p>
+                  <p className="text-xs text-slate-500">Direct customer invoice & statement delivery.</p>
                 </div>
               </div>
-              <Badge variant={formData.whatsAppStatus === 'connected' ? 'success' : 'draft'}>
-                {formData.whatsAppStatus === 'connected' ? 'Simulated Connected' : 'Disconnected'}
-              </Badge>
+              <Badge variant="draft">Currently Not Implemented</Badge>
             </div>
 
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-2">
-              <p className="font-semibold text-slate-800">
-                Notice: WhatsApp messaging is completely optional.
+            <div className="p-4 bg-amber-50/90 rounded-xl border border-amber-200 text-xs text-amber-800 space-y-2">
+              <p className="font-semibold text-amber-950">
+                Notice: WhatsApp messaging integration is currently not implemented.
               </p>
               <p>
-                When enabled, action buttons across Invoices, Customers, and Statements allow simulating instant PDF statement links or invoice reminders to customer phone numbers without requiring third-party API credentials.
+                Sending automated WhatsApp messages requires configuring official Meta WhatsApp Business Cloud API or Twilio credentials. Invoices and monthly statements can still be exported and shared manually as PDF files.
               </p>
             </div>
 
             <Input
               label="Business WhatsApp Number"
               placeholder="+44 7700 900123"
+              disabled
               value={formData.whatsAppPhone || '+44 7700 900123'}
               onChange={(e) => setFormData({ ...formData, whatsAppPhone: e.target.value })}
             />
 
             <div>
               <Button
-                variant={formData.whatsAppStatus === 'connected' ? 'outline' : 'whatsapp'}
-                onClick={toggleWhatsAppConnection}
+                variant="outline"
+                onClick={() => showToast('WhatsApp integration is currently not implemented.', 'warning')}
               >
-                {formData.whatsAppStatus === 'connected'
-                  ? 'Disconnect WhatsApp Simulation'
-                  : 'Connect WhatsApp Simulation'}
+                Connect WhatsApp (Currently Not Implemented)
               </Button>
             </div>
           </div>

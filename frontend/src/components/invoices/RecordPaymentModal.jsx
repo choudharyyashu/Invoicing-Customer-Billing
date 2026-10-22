@@ -8,7 +8,7 @@ import { formatCurrency } from '../../utils/formatCurrency';
 import { CreditCard, CheckCircle2 } from 'lucide-react';
 
 export const RecordPaymentModal = ({ isOpen, onClose, targetInvoice = null }) => {
-  const { customers, invoices, recordPayment, currencySymbol } = useApp();
+  const { customers, invoices, recordPayment, currencySymbol, showToast } = useApp();
 
   const [customerId, setCustomerId] = useState('');
   const [invoiceId, setInvoiceId] = useState('');
@@ -180,10 +180,16 @@ export const RecordPaymentModal = ({ isOpen, onClose, targetInvoice = null }) =>
             label="Payment Method"
             required
             value={method}
-            onChange={(e) => setMethod(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              setMethod(val);
+              if (val === 'Square') {
+                showToast('Square POS card terminal integration is currently not implemented.', 'warning');
+              }
+            }}
             options={[
               { value: 'Bank Transfer', label: 'Bank Transfer (BACS/Faster Pay)' },
-              { value: 'Square', label: 'Square POS / Online' },
+              { value: 'Square', label: 'Square POS (Currently Not Implemented)' },
               { value: 'Cash', label: 'Cash on Delivery' },
               { value: 'Cheque', label: 'Cheque' },
               { value: 'Other', label: 'Other' },

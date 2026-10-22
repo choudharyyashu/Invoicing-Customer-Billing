@@ -98,74 +98,74 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex antialiased">
+    <div className="min-h-screen lg:h-screen lg:max-h-screen overflow-y-auto lg:overflow-hidden bg-[#F8FAFC] flex antialiased">
       {/* Left Visual Branding Panel (Hidden on Mobile) */}
-      <div className="hidden lg:flex lg:w-1/2 bg-slate-900 text-white p-12 flex-col justify-between relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-slate-900 text-white p-6 xl:p-10 flex-col justify-between relative overflow-hidden h-full">
         {/* Background decorative gradient glow */}
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-600/30 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none" />
 
         {/* Brand Header */}
         <div className="flex items-center gap-3 relative z-10">
-          <div className="w-11 h-11 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
-            <Layers className="w-6 h-6" />
+          <div className="w-10 h-10 xl:w-11 xl:h-11 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+            <Layers className="w-5 h-5 xl:w-6 xl:h-6" />
           </div>
           <div>
-            <h1 className="text-xl font-extrabold tracking-tight text-white leading-tight">
+            <h1 className="text-lg xl:text-xl font-extrabold tracking-tight text-white leading-tight">
               Ledger<span className="text-blue-400">Flow</span>
             </h1>
-            <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest">
+            <p className="text-[10px] xl:text-[11px] font-semibold text-slate-400 uppercase tracking-widest">
               Business SaaS Dashboard
             </p>
           </div>
         </div>
 
         {/* Center Marketing Value Props */}
-        <div className="space-y-8 max-w-lg relative z-10 my-auto py-8">
+        <div className="space-y-4 xl:space-y-6 max-w-lg relative z-10 my-auto py-2">
           <div>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/15 text-blue-400 text-xs font-bold border border-blue-500/30 mb-4">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/15 text-blue-400 text-xs font-bold border border-blue-500/30 mb-2.5">
               <Sparkles className="w-3.5 h-3.5" /> Smart Invoicing & Purchasing
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-white leading-tight tracking-tight">
+            <h2 className="text-2xl xl:text-3xl font-black text-white leading-tight tracking-tight">
               Simple invoicing, daily purchasing & accounting made easy.
             </h2>
-            <p className="text-slate-400 text-sm mt-3 leading-relaxed">
+            <p className="text-slate-400 text-xs xl:text-sm mt-2 leading-relaxed">
               Designed specifically for small business owners, wholesale distributors, and food suppliers who need straightforward financial control without complexity.
             </p>
           </div>
 
-          <div className="space-y-3.5">
-            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-800/60 border border-slate-700/60 backdrop-blur-xs">
-              <div className="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
-                <TrendingUp className="w-4 h-4" />
+          <div className="space-y-2 xl:space-y-3">
+            <div className="flex items-start gap-2.5 p-2.5 xl:p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 backdrop-blur-xs">
+              <div className="w-7 h-7 xl:w-8 xl:h-8 rounded-lg xl:rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
+                <TrendingUp className="w-3.5 h-3.5 xl:w-4 xl:h-4" />
               </div>
               <div>
                 <h4 className="text-xs font-bold text-white">Daily Order & Inventory Aggregation</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">
+                <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
                   Combine customer produce orders into a single wholesale purchasing sheet instantly.
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-800/60 border border-slate-700/60 backdrop-blur-xs">
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
-                <CheckCircle2 className="w-4 h-4" />
+            <div className="flex items-start gap-2.5 p-2.5 xl:p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 backdrop-blur-xs">
+              <div className="w-7 h-7 xl:w-8 xl:h-8 rounded-lg xl:rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                <CheckCircle2 className="w-3.5 h-3.5 xl:w-4 xl:h-4" />
               </div>
               <div>
                 <h4 className="text-xs font-bold text-white">Automated Customer Balances & Statements</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">
+                <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
                   Live outstanding tracking with accountant-ready debit & credit statement PDFs.
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-800/60 border border-slate-700/60 backdrop-blur-xs">
-              <div className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center shrink-0">
-                <FileSpreadsheet className="w-4 h-4" />
+            <div className="flex items-start gap-2.5 p-2.5 xl:p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 backdrop-blur-xs">
+              <div className="w-7 h-7 xl:w-8 xl:h-8 rounded-lg xl:rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center shrink-0">
+                <FileSpreadsheet className="w-3.5 h-3.5 xl:w-4 xl:h-4" />
               </div>
               <div>
                 <h4 className="text-xs font-bold text-white">HMRC Making Tax Digital (MTD) VAT</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">
+                <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
                   Automatic 20% standard and 0% produce zero-rated tax calculation.
                 </p>
               </div>
@@ -174,22 +174,22 @@ export const Login = () => {
         </div>
 
         {/* Footer Security Badge */}
-        <div className="flex items-center gap-2 text-xs text-slate-400 relative z-10 pt-4 border-t border-slate-800">
-          <ShieldCheck className="w-4 h-4 text-emerald-400" />
+        <div className="flex items-center gap-2 text-[11px] text-slate-400 relative z-10 pt-3 border-t border-slate-800">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
           <span>Secure Mock Enterprise Workspace • 256-bit Simulated Encryption</span>
         </div>
       </div>
 
       {/* Right Login Form Container */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12">
-        <div className="w-full max-w-md space-y-6">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-6 xl:p-10 h-full overflow-y-auto lg:overflow-hidden">
+        <div className="w-full max-w-md space-y-3.5 xl:space-y-4.5 my-auto">
           {/* Mobile Brand Header */}
-          <div className="lg:hidden flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-xs">
-              <Layers className="w-5 h-5" />
+          <div className="lg:hidden flex items-center gap-3 mb-4">
+            <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-xs">
+              <Layers className="w-4 h-4" />
             </div>
             <div>
-              <span className="text-lg font-black text-slate-900 tracking-tight">
+              <span className="text-base font-black text-slate-900 tracking-tight">
                 Ledger<span className="text-blue-600">Flow</span>
               </span>
               <p className="text-[10px] font-semibold text-slate-400 uppercase">
@@ -199,36 +199,36 @@ export const Login = () => {
           </div>
 
           <div>
-            <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-xl xl:text-2xl font-black text-slate-900 tracking-tight">
               Sign in to your account
             </h2>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-500 mt-0.5">
               Enter your credentials or choose a quick demo role to explore.
             </p>
           </div>
 
           {/* Quick Demo Login Preset Buttons */}
-          <div className="p-3.5 bg-blue-50/70 rounded-2xl border border-blue-100 space-y-2">
-            <span className="text-[11px] font-bold text-blue-900 uppercase tracking-wider block">
+          <div className="p-2.5 xl:p-3 bg-blue-50/70 rounded-xl border border-blue-100 space-y-1.5">
+            <span className="text-[10px] font-bold text-blue-900 uppercase tracking-wider block">
               Quick One-Click Demo Logins:
             </span>
-            <div className="grid grid-cols-1 gap-1.5">
+            <div className="grid grid-cols-1 gap-1">
               {demoAccounts.map((acc) => (
                 <button
                   key={acc.role}
                   type="button"
                   onClick={() => handleSelectDemo(acc)}
-                  className={`flex items-center justify-between p-2.5 rounded-xl border text-left text-xs transition-all cursor-pointer ${
+                  className={`flex items-center justify-between p-2 rounded-lg border text-left text-xs transition-all cursor-pointer ${
                     email === acc.email
                       ? 'bg-white border-blue-500 shadow-xs ring-1 ring-blue-500/20'
                       : 'bg-white/60 border-slate-200/80 hover:bg-white hover:border-slate-300 text-slate-700'
                   }`}
                 >
-                  <div>
-                    <span className="font-bold text-slate-900 block">{acc.label}</span>
-                    <span className="text-[11px] text-slate-500">{acc.description}</span>
+                  <div className="min-w-0 pr-2">
+                    <span className="font-bold text-slate-900 block truncate">{acc.label}</span>
+                    <span className="text-[10px] text-slate-500 block truncate">{acc.description}</span>
                   </div>
-                  <span className="px-2 py-0.5 rounded-md bg-blue-100 text-blue-700 text-[10px] font-bold shrink-0 ml-2">
+                  <span className="px-2 py-0.5 rounded-md bg-blue-100 text-blue-700 text-[10px] font-bold shrink-0">
                     {acc.badge}
                   </span>
                 </button>
@@ -238,22 +238,22 @@ export const Login = () => {
 
           {/* Error Message Banner */}
           {errorMessage && (
-            <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2 animate-fade-in">
+            <div className="p-2.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2 animate-fade-in">
               <span className="font-bold shrink-0">Error:</span>
               <span>{errorMessage}</span>
             </div>
           )}
 
           {/* Form */}
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-3 xl:space-y-3.5">
             {/* Email */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] font-semibold text-slate-700 uppercase tracking-wider mb-1">
                 Email Address
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                  <Mail className="w-4 h-4" />
+                  <Mail className="w-3.5 h-3.5" />
                 </div>
                 <input
                   type="email"
@@ -261,28 +261,28 @@ export const Login = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@business.com"
-                  className="block w-full rounded-xl border border-slate-300 pl-9 pr-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-colors"
+                  className="block w-full rounded-xl border border-slate-300 pl-8.5 pr-3 py-2 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-colors"
                 />
               </div>
             </div>
 
             {/* Password */}
             <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-[11px] font-semibold text-slate-700 uppercase tracking-wider">
                   Password
                 </label>
                 <button
                   type="button"
                   onClick={() => showToast('Enter your registered password or choose a demo account above.', 'info')}
-                  className="text-xs text-blue-600 hover:text-blue-800 font-medium cursor-pointer"
+                  className="text-[11px] text-blue-600 hover:text-blue-800 font-medium cursor-pointer"
                 >
                   Forgot password?
                 </button>
               </div>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                  <Lock className="w-4 h-4" />
+                  <Lock className="w-3.5 h-3.5" />
                 </div>
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -290,14 +290,14 @@ export const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="block w-full rounded-xl border border-slate-300 pl-9 pr-10 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-colors"
+                  className="block w-full rounded-xl border border-slate-300 pl-8.5 pr-9 py-2 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-colors"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                 </button>
               </div>
             </div>
@@ -309,12 +309,12 @@ export const Login = () => {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="rounded text-blue-600 focus:ring-blue-500 h-4 w-4"
+                  className="rounded text-blue-600 focus:ring-blue-500 h-3.5 w-3.5"
                 />
                 <span className="text-xs text-slate-600 font-medium">Keep me signed in</span>
               </label>
 
-              <span className="text-[11px] text-slate-400 font-mono">v1.4 Live Auth</span>
+              <span className="text-[10px] text-slate-400 font-mono">v1.4 Live Auth</span>
             </div>
 
             {/* Submit Button */}
@@ -325,14 +325,14 @@ export const Login = () => {
               loading={isLoading}
               icon={ArrowRight}
               iconPosition="right"
-              className="w-full font-bold shadow-md shadow-blue-600/20 text-sm py-3"
+              className="w-full font-bold shadow-md shadow-blue-600/20 text-xs sm:text-sm py-2.5 xl:py-3"
             >
               Sign In to Dashboard
             </Button>
           </form>
 
           {/* Direct Access Note */}
-          <div className="pt-2 text-center text-xs text-slate-500">
+          <div className="pt-1 text-center text-[11px] text-slate-500">
             <span>Production-secured authentication. </span>
             <span className="text-slate-600 font-medium">Session cookies strictly managed by backend.</span>
           </div>
