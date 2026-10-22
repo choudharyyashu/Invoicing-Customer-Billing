@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import {
   Menu,
   Search,
@@ -15,10 +15,15 @@ import {
   AlertTriangle,
   CheckCircle2,
   Building2,
+  Package,
+  Clock,
+  Check,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import { Button } from '../ui/Button';
+import { formatCurrency } from '../../utils/formatCurrency';
+import { formatDate } from '../../utils/formatDate';
 
 export const Topbar = ({ onOpenMobileMenu }) => {
   const {
@@ -26,6 +31,9 @@ export const Topbar = ({ onOpenMobileMenu }) => {
     setIsSearchOpen,
     businessSettings,
     invoices,
+    dailyOrders,
+    payments,
+    products,
     currentUser,
     currentRole,
     logoutUser,
@@ -36,13 +44,160 @@ export const Topbar = ({ onOpenMobileMenu }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showQuickCreate, setShowQuickCreate] = useState(false);
+  const [readNotifIds, setReadNotifIds] = useState(() => {
+    try {
+      const saved = localStorage.getItem('lf_read_notif_ids');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
 
   const notifRef = useRef(null);
   const profileRef = useRef(null);
   const quickRef = useRef(null);
   const navigate = useNavigate();
 
-  const overdueCount = invoices.filter((i) => i.status === 'Overdue').length;
+  // Dynamically compute real live notifications from database records
+  const notifications = useMemo(() => {
+    const list = [];
+
+    if (currentRole === 'customer') {
+      const myInvoices = invoices || [];
+      const overdue = myInvoices.filter((i) => i.status === 'Overdue');
+      overdue.forEach((inv) => {
+        list.push({
+          id: `cust-inv-overdue-${inv.id}`,
+          type: 'danger',
+          title: `Overdue Invoice: ${inv.invoiceNumber}`,
+          description: `Outstanding balance of ${formatCurrency(inv.balanceDue || inv.total)} was due on ${formatDate(inv.dueDate)}.`,
+          link: '/portal?tab=invoices',
+          time: 'Payment Overdue',
+          icon: AlertTriangle,
+          iconColor: 'bg-red-50 text-red-600',
+        });
+      });
+
+      const recentPayments = (payments || []).slice(0, 3);
+      recentPayments.forEach((pmt) => {
+        list.push({
+          id: `cust-pmt-${pmt.id}`,
+          type: 'success',
+          title: `Payment Received: ${formatCurrency(pmt.amount)}`,
+          description: `Receipt ${pmt.paymentNumber || pmt.id} allocated via ${pmt.paymentMethod || 'Bank Transfer'}.`,
+          link: '/portal?tab=payments',
+          time: formatDate(pmt.date, { relative: true }),
+          icon: CheckCircle2,
+          iconColor: 'bg-emerald-50 text-emerald-600',
+        });
+      });
+      return list;
+    }
+
+    // 1. Overdue Invoices Alert (Real DB)
+    const overdueInvoices = (invoices || []).filter((i) => i.status === 'Overdue');
+    overdueInvoices.slice(0, 4).forEach((inv) => {
+      list.push({
+        id: `inv-overdue-${inv.id}`,
+        type: 'danger',
+        title: `Overdue: ${inv.invoiceNumber}`,
+        description: `${inv.customerName || 'Customer'} owes ${formatCurrency(inv.balanceDue || inv.total)} (Due: ${formatDate(inv.dueDate)}).`,
+        link: `/invoices/${inv.realId || inv.id}`,
+        time: formatDate(inv.dueDate, { relative: true }),
+        icon: AlertTriangle,
+        iconColor: 'bg-red-50 text-red-600',
+      });
+    });
+
+    // 2. Draft Invoices Waiting for Approval (Real DB)
+    const draftInvoices = (invoices || []).filter((i) => i.status === 'Draft');
+    if (draftInvoices.length > 0) {
+      list.push({
+        id: `draft-invoices-${draftInvoices.length}`,
+        type: 'info',
+        title: `${draftInvoices.length} Draft Invoice(s) Pending`,
+        description: `Unfinalized draft sales invoices ready for final approval & delivery dispatch.`,
+        link: '/invoices',
+        time: 'Pending Review',
+        icon: FileText,
+        iconColor: 'bg-blue-50 text-blue-600',
+      });
+    }
+
+    // 3. Daily Orders Requiring Fulfillment (Real DB)
+    const pendingOrders = (dailyOrders || []).filter((o) => o.status !== 'Invoiced' && o.status !== 'Cancelled');
+    if (pendingOrders.length > 0) {
+      list.push({
+        id: `orders-pending-${pendingOrders.length}`,
+        type: 'success',
+        title: `${pendingOrders.length} Daily Order(s) Awaiting Fulfillment`,
+        description: `Morning wholesale produce orders queued for market collection & van loading.`,
+        link: '/orders',
+        time: 'Today',
+        icon: CheckCircle2,
+        iconColor: 'bg-emerald-50 text-emerald-600',
+      });
+    }
+
+    // 4. Unallocated Customer Payments (Real DB)
+    const unallocated = (payments || []).filter((p) => parseFloat(p.unallocatedAmount) > 0);
+    if (unallocated.length > 0) {
+      const sumUnallocated = unallocated.reduce((sum, p) => sum + parseFloat(p.unallocatedAmount || 0), 0);
+      list.push({
+        id: `unallocated-pmts-${unallocated.length}`,
+        type: 'purple',
+        title: `${unallocated.length} Unallocated Payment(s)`,
+        description: `${formatCurrency(sumUnallocated)} received from customers awaiting invoice reconciliation.`,
+        link: '/payments',
+        time: 'Reconciliation',
+        icon: CreditCard,
+        iconColor: 'bg-purple-50 text-purple-600',
+      });
+    }
+
+    // 5. Low Stock Warehouse Items (Real DB)
+    const lowStock = (products || []).filter((p) => p.stock !== undefined && p.stock <= 5 && p.isActive !== false);
+    if (lowStock.length > 0) {
+      list.push({
+        id: `low-stock-${lowStock.length}`,
+        type: 'warning',
+        title: `Low Stock: ${lowStock.length} Product(s)`,
+        description: `${lowStock.slice(0, 3).map((p) => p.name).join(', ')}${lowStock.length > 3 ? '...' : ''} need restocking.`,
+        link: '/purchases',
+        time: 'Inventory',
+        icon: Package,
+        iconColor: 'bg-amber-50 text-amber-600',
+      });
+    }
+
+    return list;
+  }, [invoices, dailyOrders, payments, products, currentRole]);
+
+  const unreadCount = notifications.filter((n) => !readNotifIds.includes(n.id)).length;
+
+  const markAllAsRead = (e) => {
+    if (e) e.stopPropagation();
+    const allIds = notifications.map((n) => n.id);
+    const updated = Array.from(new Set([...readNotifIds, ...allIds]));
+    setReadNotifIds(updated);
+    try {
+      localStorage.setItem('lf_read_notif_ids', JSON.stringify(updated));
+    } catch {}
+  };
+
+  const handleNotificationClick = (notif) => {
+    if (!readNotifIds.includes(notif.id)) {
+      const updated = [...readNotifIds, notif.id];
+      setReadNotifIds(updated);
+      try {
+        localStorage.setItem('lf_read_notif_ids', JSON.stringify(updated));
+      } catch {}
+    }
+    setShowNotifications(false);
+    if (notif.link) {
+      navigate(notif.link);
+    }
+  };
 
   useEffect(() => {
     const handleOutside = (e) => {
@@ -198,53 +353,103 @@ export const Topbar = ({ onOpenMobileMenu }) => {
               aria-label="Notifications"
             >
               <Bell className="w-4 h-4" />
-              {overdueCount > 0 && currentRole !== 'customer' && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center animate-pulse">
-                  {overdueCount}
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center animate-pulse shadow-xs">
+                  {unreadCount}
                 </span>
               )}
             </button>
 
             {showNotifications && (
-              <div className="absolute right-0 mt-2 w-72 sm:w-80 max-w-[calc(100vw-24px)] rounded-2xl bg-white shadow-xl border border-slate-200 py-3 z-50 animate-fade-in">
-                <div className="px-4 pb-2 border-b border-slate-100 flex items-center justify-between">
-                  <h4 className="font-bold text-xs text-slate-900 uppercase tracking-wider">Notifications</h4>
-                  <span className="text-[10px] text-blue-600 font-semibold cursor-pointer">Mark read</span>
-                </div>
-                <div className="divide-y divide-slate-50 max-h-64 overflow-y-auto">
-                  {currentRole === 'customer' ? (
-                    <div className="p-3.5 text-center text-xs text-slate-500">
-                      Welcome to your client portal. All your invoice statements are up to date!
-                    </div>
-                  ) : (
-                    <>
-                      {overdueCount > 0 ? (
-                        <div className="p-3 hover:bg-slate-50 flex items-start gap-3 cursor-pointer" onClick={() => navigate('/invoices')}>
-                          <div className="w-7 h-7 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0">
-                            <AlertTriangle className="w-3.5 h-3.5" />
-                          </div>
-                          <div>
-                            <p className="text-xs font-semibold text-slate-900">{overdueCount} Overdue Invoice(s)</p>
-                            <p className="text-[11px] text-slate-500 mt-0.5">Market Street Foods has an outstanding balance overdue.</p>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="p-4 text-center text-xs text-slate-500">
-                          No urgent alerts. All accounts up to date!
-                        </div>
-                      )}
-                      <div className="p-3 hover:bg-slate-50 flex items-start gap-3 cursor-pointer" onClick={() => navigate('/orders')}>
-                        <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-semibold text-slate-900">Today's Daily Aggregation Ready</p>
-                          <p className="text-[11px] text-slate-500 mt-0.5">4 customer orders combined for morning purchasing.</p>
-                        </div>
-                      </div>
-                    </>
+              <div className="absolute right-0 mt-2 w-80 sm:w-96 max-w-[calc(100vw-24px)] rounded-2xl bg-white shadow-xl border border-slate-200 py-3 z-50 animate-fade-in">
+                <div className="px-4 pb-2.5 border-b border-slate-100 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <h4 className="font-bold text-xs text-slate-900 uppercase tracking-wider">Live Alerts & Reminders</h4>
+                    {unreadCount > 0 && (
+                      <span className="bg-red-50 text-red-600 text-[10px] font-bold px-2 py-0.5 rounded-full border border-red-200">
+                        {unreadCount} new
+                      </span>
+                    )}
+                  </div>
+                  {unreadCount > 0 && (
+                    <button
+                      type="button"
+                      onClick={markAllAsRead}
+                      className="text-[11px] text-blue-600 hover:text-blue-800 font-semibold cursor-pointer hover:underline"
+                    >
+                      Mark all read
+                    </button>
                   )}
                 </div>
+
+                <div className="divide-y divide-slate-100 max-h-80 overflow-y-auto">
+                  {notifications.length === 0 ? (
+                    <div className="p-6 text-center space-y-1.5">
+                      <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 mx-auto flex items-center justify-center">
+                        <Check className="w-4 h-4" />
+                      </div>
+                      <p className="text-xs font-semibold text-slate-800">All caught up!</p>
+                      <p className="text-[11px] text-slate-500">No overdue accounts or pending actions. Everything is up to date.</p>
+                    </div>
+                  ) : (
+                    notifications.map((notif) => {
+                      const isUnread = !readNotifIds.includes(notif.id);
+                      const IconComponent = notif.icon || Bell;
+                      return (
+                        <div
+                          key={notif.id}
+                          onClick={() => handleNotificationClick(notif)}
+                          className={`p-3.5 hover:bg-slate-50 flex items-start gap-3 cursor-pointer transition-colors ${
+                            isUnread ? 'bg-blue-50/25' : ''
+                          }`}
+                        >
+                          <div className={`w-8 h-8 rounded-xl ${notif.iconColor || 'bg-blue-50 text-blue-600'} flex items-center justify-center shrink-0 shadow-2xs`}>
+                            <IconComponent className="w-4 h-4" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-1">
+                              <p className={`text-xs truncate ${isUnread ? 'text-slate-900 font-bold' : 'text-slate-700 font-semibold'}`}>
+                                {notif.title}
+                              </p>
+                              {isUnread && <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />}
+                            </div>
+                            <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-2 leading-relaxed">
+                              {notif.description}
+                            </p>
+                            <span className="text-[10px] text-slate-400 font-medium mt-1 inline-block">
+                              {notif.time}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+
+                {notifications.length > 0 && currentRole !== 'customer' && (
+                  <div className="pt-2 px-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowNotifications(false);
+                        navigate('/invoices');
+                      }}
+                      className="text-slate-600 hover:text-blue-600 font-medium cursor-pointer"
+                    >
+                      View All Invoices →
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowNotifications(false);
+                        navigate('/orders');
+                      }}
+                      className="text-slate-600 hover:text-blue-600 font-medium cursor-pointer"
+                    >
+                      Daily Orders →
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
